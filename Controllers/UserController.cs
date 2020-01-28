@@ -36,9 +36,8 @@ namespace LCCapstone.Controllers
         [HttpPost]
         public IActionResult Add(AddUserViewModel addUserViewModel)
         {
-            if (ModelState.IsValid)
+            if (ModelState.IsValid && addUserViewModel.Password == addUserViewModel.VerifyPass)
             {
-
                 User newUser = new User
                 {
                     Username = addUserViewModel.Username,
@@ -52,6 +51,11 @@ namespace LCCapstone.Controllers
             }
 
             return View(addUserViewModel); // If form invalid, render form again w/ error messages
+        }
+
+        public IActionResult Login() // render login form -> post form to Post login to be verified
+        {
+            return View();
         }
     }
 }

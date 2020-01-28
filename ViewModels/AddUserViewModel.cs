@@ -8,15 +8,25 @@ namespace LCCapstone.ViewModels
 {
     public class AddUserViewModel
     {
-        [Required]
+        [Required(ErrorMessage = "Username cannot be empty.")]
+        [MinLength(4, ErrorMessage = "Username must be between 4 and 22 characters long."),
+            MaxLength(22, ErrorMessage = "Username must be between 4 and 22 characters long.")]
         public string Username { get; set; }
 
-        [Required]
+        [Required(ErrorMessage = "Password cannot be empty.")]
+        [MinLength(4, ErrorMessage = "Password must be between 4 and 22 characters long."),
+            MaxLength(22, ErrorMessage = "Password must be between 4 and 22 characters long.")]
         public string Password { get; set; } 
+
+        [Required(ErrorMessage = "You must verify your password.")]
+        [Compare("Password", ErrorMessage = "Passwords must match.")]
+        [Display(Name ="Verify Password")]
+        public string VerifyPass { get; set; }
 
         public AddUserViewModel()
         {
-
+            
         }
+ 
     }
 }

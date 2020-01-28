@@ -6,14 +6,20 @@
 
     <div class="form-group">
         <label asp-for="Username"></label>
-        <input class="" asp-for="Username" />
+        <input class="form-control" asp-for="Username" />
         <span asp-validation-for="Username"></span>
     </div>
 
     <div class="form-group">
         <label asp-for="Password"></label>
-        <input class="form-control" asp-for="Password" type="password"/>
+        <input class="form-control" asp-for="Password" type="password" />
         <span asp-validation-for="Password"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="VerifyPass"></label>
+        <input class="form-control" asp-for="VerifyPass" type="password" />
+        <span asp-validation-for="VerifyPass"></span>
     </div>
 
     <input type="submit" value="Create Account" />
