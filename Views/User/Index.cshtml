@@ -2,15 +2,17 @@
 
 <h1>Registered Users</h1>
 
-<ul>
+<body>
     @foreach (LCCapstone.Models.User user in Model)
-    { // TODO: Modify to link to user profile
-        <li>@user.Username</li>
+    {
+        <a href="/User?username=@user.Username">@user.Username</a><br />
     }
 
-</ul>@if (Model.Count == 0)
-{
-    <p> No registered users yet.</p>
-}
+    @if (Model.Count == 0)
+    {
+        <p> No registered users yet.</p>
+    }
+    <br />
+</body>
 
 <p><a asp-controller="User" asp-action="Add">Register</a></p>

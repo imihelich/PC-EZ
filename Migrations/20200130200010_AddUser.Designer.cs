@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace LCCapstone.Migrations
 {
     [DbContext(typeof(UserDbContext))]
-    [Migration("20200128180852_AddUser")]
+    [Migration("20200130200010_AddUser")]
     partial class AddUser
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -28,6 +28,9 @@ namespace LCCapstone.Migrations
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<string>("Password")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("SkillLevel")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Username")

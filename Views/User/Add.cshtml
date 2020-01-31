@@ -22,6 +22,17 @@
         <span asp-validation-for="VerifyPass"></span>
     </div>
 
+    <div class="form-group">
+        <label asp-for="SkillLevel"></label>
+        <select asp-for="SkillLevel">
+            <option>Newbie</option>
+            <option>Hobbyist</option>
+            <option>Experienced</option>
+            <option>Professional</option>
+        </select>
+        <span asp-validation-for="SkillLevel"></span>
+    </div>
+
     <input type="submit" value="Create Account" />
 
 </form>

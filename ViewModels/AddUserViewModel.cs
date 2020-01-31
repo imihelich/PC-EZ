@@ -23,10 +23,13 @@ namespace LCCapstone.ViewModels
         [Display(Name ="Verify Password")]
         public string VerifyPass { get; set; }
 
+        [Required(ErrorMessage = "Please select a skill level.")]
+        [Display(Name = "Tech Skill Level")]
+        public string SkillLevel { get; set; }
+
         public AddUserViewModel()
         {
             
         }
- 
     }
 }

@@ -11,24 +11,61 @@ using LCCapstone.ViewModels;
 
 namespace LCCapstone.Controllers
 {
-    public class UserController :  Controller
+    public class UserController : Controller
     {
         private readonly UserDbContext context;
+
+        private User activeUser;
+
+        public List<User> userList;
+
+        public bool ValidAccount(string username, string password) //determines if an account with the same username and password exists
+        {
+            userList = context.Users.ToList();
+            foreach (User user in userList)
+            {
+                if (user.Username.ToLower().Equals(username.ToLower()) && user.Password.Equals(password)) // password is case sensitive
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        public User FindByUsername(string username)
+        {
+            foreach (User user in context.Users.ToList())
+            {
+                if (username.ToLower().Equals(user.Username.ToLower()))
+                {
+                    return context.Users.Find(user.ID);
+                }
+            }
+            return null;
+        }
 
         public UserController(UserDbContext dbContext)
         {
             context = dbContext;
         }
 
-        public IActionResult Index()
+        [HttpGet]
+        public IActionResult Index(string username)
         {
-            List<User> userList = context.Users.ToList();
+            if (username != null)
+            {
+                ViewUserViewModel viewUser = new ViewUserViewModel
+                {
+                    User = FindByUsername(username)
+                };
+                return View("ViewUser",viewUser);
+            }
+            userList = context.Users.ToList();
             return View(userList);
         }
 
         public IActionResult Add()
         {
-            // Create & render new user form
             AddUserViewModel addUserViewModel = new AddUserViewModel();
             return View(addUserViewModel);
         }
@@ -36,26 +73,60 @@ namespace LCCapstone.Controllers
         [HttpPost]
         public IActionResult Add(AddUserViewModel addUserViewModel)
         {
-            if (ModelState.IsValid && addUserViewModel.Password == addUserViewModel.VerifyPass)
+            if (ModelState.IsValid) // checks that form model is valid before proceeding
             {
-                User newUser = new User
+                if (FindByUsername(addUserViewModel.Username) == null) //checks that username is not in use before adding new account
                 {
-                    Username = addUserViewModel.Username,
-                    Password = addUserViewModel.Password
-                    // TODO: modify password to save with hashing
-                };
+                    User newUser = new User
+                    {
+                        Username = addUserViewModel.Username,
+                        Password = addUserViewModel.Password,
+                        SkillLevel = addUserViewModel.SkillLevel
+                    };
+                    context.Users.Add(newUser);
+                    context.SaveChanges();
+                    activeUser = context.Users.Find(newUser.ID);
+                    return RedirectToAction("Index", "User", new { username = newUser.Username });
+                }
 
-                context.Users.Add(newUser);
-                context.SaveChanges();
-                return Redirect("/User");
+                return View(addUserViewModel); // return with error message for existing account
             }
 
-            return View(addUserViewModel); // If form invalid, render form again w/ error messages
+            return View(addUserViewModel); // form invalid return
         }
 
         public IActionResult Login() // render login form -> post form to Post login to be verified
         {
-            return View();
+            LoginViewModel loginViewModel = new LoginViewModel();
+            return View(loginViewModel);
         }
+
+        [HttpPost]
+        public IActionResult Login(LoginViewModel loginViewModel)
+        {
+            if (ModelState.IsValid)
+            {
+                if (ValidAccount(loginViewModel.Username, loginViewModel.Password) == true)
+                {
+                    activeUser = FindByUsername(loginViewModel.Username);
+                    return RedirectToAction("Index","User", new {username = loginViewModel.Username});
+                }
+                if (FindByUsername(loginViewModel.Username) == null)
+                {
+                    LoginViewModel errorLogin = new LoginViewModel("Account does not exist.");
+                    return View(errorLogin);
+                }
+                else
+                {
+                    LoginViewModel errorLogin = new LoginViewModel("Incorrect password");
+                    return View(errorLogin);
+                }
+            }
+            return View(loginViewModel); // invalid form return
+        } 
+        
+
+        
+
     }
 }

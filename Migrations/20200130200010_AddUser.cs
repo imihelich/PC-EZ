@@ -13,7 +13,8 @@ namespace LCCapstone.Migrations
                     ID = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Username = table.Column<string>(nullable: true),
-                    Password = table.Column<string>(nullable: true)
+                    Password = table.Column<string>(nullable: true),
+                    SkillLevel = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
                 {

@@ -9,6 +9,8 @@ namespace LCCapstone.Models
     {
         public string Username { get; set; }
         public string Password { get; set; }
+        public string SkillLevel { get; set; }
         public int ID { get; set; }
+        
     }
 }
