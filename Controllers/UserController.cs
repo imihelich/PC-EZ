@@ -89,7 +89,8 @@ namespace LCCapstone.Controllers
                     return RedirectToAction("Index", "User", new { username = newUser.Username });
                 }
 
-                return View(addUserViewModel); // return with error message for existing account
+                AddUserViewModel addError = new AddUserViewModel("An account with this username already exists - please try a different username.");
+                return View(addError); // return with error message for existing account
             }
 
             return View(addUserViewModel); // form invalid return
@@ -125,8 +126,5 @@ namespace LCCapstone.Controllers
             return View(loginViewModel); // invalid form return
         } 
         
-
-        
-
     }
 }
